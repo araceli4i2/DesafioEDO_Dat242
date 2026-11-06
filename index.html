@@ -1367,12 +1367,12 @@
           <div class="card-icon">☀️</div>
           <h3>La Radiación en El Alto</h3>
           <p>
-            En la <strong>Feria 16 de Julio de El Alto</strong> (una de las mayores de Sudamérica, a 4.000 m.s.n.m.), la
-            menor densidad atmosférica incrementa la radiación UV en más de un 25-30% respecto al nivel del mar, con
-            Índices UV que frecuentemente superan 12 ("Extremo").
+            En la <strong>Feria 16 de Julio de El Alto</strong> (situada a gran altitud, a unos 4.000 m.s.n.m.), la
+            radiación UV aumenta con la altitud porque hay menos atmósfera que la filtre.
+            <!-- TODO: citar SENAMHI u otra fuente si se desea incluir cifras -->
           </p>
         </div>
-        <div class="card card-warning">
+        <div class="card">
           <div class="card-icon" style="color: var(--status-warn); background: rgba(245, 158, 11, 0.15);">🧪</div>
           <h3>Fotólisis y Termólisis</h3>
           <p>
@@ -1381,7 +1381,7 @@
             el anillo betalactámico sufre hidrólisis y fotólisis acelerada.
           </p>
         </div>
-        <div class="card card-danger">
+        <div class="card">
           <div class="card-icon" style="color: var(--status-danger); background: rgba(239, 68, 68, 0.15);">🦠</div>
           <h3>Resistencia Antimicrobiana (RAM)</h3>
           <p>
@@ -1479,6 +1479,28 @@
           </div>
         </div>
       </div>
+
+      <!-- Contexto Operativo y Parámetros del Modelo según Rúbrica -->
+      <div style="margin-top: 24px;">
+        <h4
+          style="font-size: 0.95rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-dim); margin-bottom: 8px;">
+          Población Beneficiaria y Parámetros Base
+        </h4>
+        <div class="hypotheses-list">
+          <div class="hypo-item">
+            <strong>Población beneficiaria</strong>
+            Familias, especialmente con niños, que adquieren jarabes y suspensiones pediátricas en ferias populares al aire libre de El Alto.
+          </div>
+          <div class="hypo-item">
+            <strong>Intervalo de simulación</strong>
+            t ∈ [0, T] con T = 8 h por defecto (8:00 a 16:00, jornada habitual de feria).
+          </div>
+          <div class="hypo-item">
+            <strong>Valores base hipotéticos</strong>
+            C₀ = 50 mg/mL, k = 0,025 h⁻¹, h = 1 h, h₂ = 0,5 h y umbral de seguridad = 90% de C₀.
+          </div>
+        </div>
+      </div>
     </section>
 
     <!-- SECCIÓN 4: SIMULADOR Y FRASCO INTERACTIVO -->
@@ -1519,7 +1541,7 @@
             </div>
           </div>
 
-          <form id="simForm" onsubmit="event.preventDefault(); ejecutarSimulacion();">
+          <form id="simForm" novalidate onsubmit="event.preventDefault(); ejecutarSimulacion();">
             <!-- C0 -->
             <div class="form-group">
               <div class="form-label-row">
@@ -1530,7 +1552,7 @@
                 </label>
                 <span class="unit-tag">[mg/mL]</span>
               </div>
-              <input type="number" id="inC0" class="form-input" value="50" min="0.001" step="5" required>
+              <input type="number" id="inC0" class="form-input" value="50" min="0.001" step="any" required>
               <div class="field-error-msg" id="errC0">C₀ debe ser un número finito mayor a 0.</div>
             </div>
 
@@ -1544,7 +1566,7 @@
                 </label>
                 <span class="unit-tag">[h⁻¹]</span>
               </div>
-              <input type="number" id="inK" class="form-input" value="0.025" min="0.0001" max="1" step="0.005" required>
+              <input type="number" id="inK" class="form-input" value="0.025" min="0.0001" max="1" step="any" required>
               <div class="field-error-msg" id="errK">k debe ser mayor a 0 y menor a 1.</div>
             </div>
 
@@ -1558,8 +1580,8 @@
                 </label>
                 <span class="unit-tag">[horas]</span>
               </div>
-              <input type="number" id="inT" class="form-input" value="8" min="1" max="48" step="1" required>
-              <div class="field-error-msg" id="errT">T debe ser mayor a 0 (máx. 48 h).</div>
+              <input type="number" id="inT" class="form-input" value="8" min="1" max="12" step="any" required>
+              <div class="field-error-msg" id="errT">T debe ser > 0 y ≤ 12 h.</div>
             </div>
 
             <!-- h -->
@@ -1571,7 +1593,7 @@
                 </label>
                 <span class="unit-tag">[horas]</span>
               </div>
-              <input type="number" id="inH" class="form-input" value="1" min="0.01" max="10" step="0.5" required>
+              <input type="number" id="inH" class="form-input" value="1" min="0.01" max="10" step="any" required>
               <div class="field-error-msg" id="errH">h debe ser > 0, h ≤ T y no superar 5.000 pasos.</div>
             </div>
 
@@ -1585,7 +1607,7 @@
                 </label>
                 <span class="unit-tag">[horas]</span>
               </div>
-              <input type="number" id="inH2" class="form-input" value="0.5" min="0.005" max="10" step="0.25" required>
+              <input type="number" id="inH2" class="form-input" value="0.5" min="0.005" max="10" step="any" required>
               <div class="field-error-msg" id="errH2">h₂ debe ser > 0 y menor que h (y no superar 5.000 pasos).</div>
             </div>
 
@@ -1599,7 +1621,7 @@
                 </label>
                 <span class="unit-tag">[% de C₀]</span>
               </div>
-              <input type="number" id="inUmbral" class="form-input" value="90" min="50" max="99" step="1" required>
+              <input type="number" id="inUmbral" class="form-input" value="90" min="50" max="99" step="any" required>
               <div class="field-error-msg" id="errUmbral">El umbral debe estar entre 50% y 99%.</div>
             </div>
 
@@ -1689,7 +1711,7 @@
 
                 <!-- Contenedor del líquido con clipPath -->
                 <g clip-path="url(#bottleInsideClip)">
-                  <!-- Líquido reactivo que cambia de color y de altura -->
+                  <!-- Líquido reactivo que cambia de color -->
                   <rect id="svgLiquidFill" x="48" y="95" width="124" height="220" fill="#e11d48"
                     style="transition: fill 0.4s ease;" />
                   <!-- Menisco y burbujas de suspensión -->
@@ -1778,7 +1800,7 @@
                   style="display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--text-dim); margin-bottom: 4px;">
                   <span>0 h (8:00 AM)</span>
                   <span>Línea de tiempo de exposición continua</span>
-                  <span id="lblMaxT">8 h (16:00 PM)</span>
+                  <span id="lblMaxT">8 h (4:00 PM)</span>
                 </div>
                 <input type="range" class="scrubber-slider" id="timeScrubber" min="0" max="8" step="0.05" value="0"
                   aria-label="Control deslizante de tiempo de exposición">
@@ -1954,6 +1976,9 @@
               <!-- JS -->
             </tbody>
           </table>
+          <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 10px; line-height: 1.5;">
+            💡 <strong>Interpretación del orden p:</strong> Al comparar la reducción de error entre el paso base h y el paso refinado h₂, se estima el exponente empírico de convergencia global O(hᵖ). Un orden p ≈ 2 en Heun indica que reducir el paso a la mitad reduce el error a la cuarta parte (~4x); mientras que p ≈ 4 en RK4 reduce el error a la decimosexta parte (~16x), garantizando una convergencia marcadamente más veloz y precisa.
+          </p>
         </div>
 
       </div>
@@ -2057,6 +2082,17 @@
     /* ==========================================================================
        2. MÉTODOS NUMÉRICOS (FUNCIONES PURAS Y REUTILIZABLES)
        ========================================================================== */
+    /**
+     * Formateador auxiliar con coma decimal según convención regional (es-BO)
+     */
+    function fmt(n, decimales = 2) {
+      if (typeof n !== 'number' || isNaN(n) || !isFinite(n)) return '—';
+      return n.toLocaleString('es-BO', {
+        minimumFractionDigits: decimales,
+        maximumFractionDigits: decimales
+      });
+    }
+
     /**
      * Función diferencial: dC/dt = f(t, C) = -k * C
      */
@@ -2258,9 +2294,9 @@
         document.getElementById("inK").classList.remove("is-invalid");
       }
 
-      // T
+      // T (0 < T <= 12)
       const errT = document.getElementById("errT");
-      if (isNaN(tVal) || tVal <= 0 || tVal > 48 || !isFinite(tVal)) {
+      if (isNaN(tVal) || tVal <= 0 || tVal > 12 || !isFinite(tVal)) {
         errT.style.display = "block";
         document.getElementById("inT").classList.add("is-invalid");
         valido = false;
@@ -2333,8 +2369,8 @@
       estado.umbralPct = parseFloat(document.getElementById("inUmbral").value);
 
       // Actualizar etiqueta del frasco con C0
-      document.getElementById("lblBottleC0").textContent = `C₀: ${estado.C0} mg/mL`;
-      document.getElementById("lblThresholdMarker").textContent = `Límite de seguridad: ${estado.umbralPct}%`;
+      document.getElementById("lblBottleC0").textContent = `C₀: ${fmt(estado.C0, estado.C0 % 1 === 0 ? 0 : 2)} mg/mL`;
+      document.getElementById("lblThresholdMarker").textContent = `Límite de seguridad: ${fmt(estado.umbralPct, 0)}%`;
       document.getElementById("thresholdPin").style.left = `${estado.umbralPct}%`;
       document.getElementById("lblMaxT").textContent = `${estado.T} h (${formatearHoraFeria(estado.T)})`;
       document.getElementById("timeScrubber").max = estado.T;
@@ -2421,10 +2457,11 @@
     function formatearHoraFeria(tHoras) {
       const horaBase = 8; // 8:00 AM
       const totalMinutos = Math.round((horaBase + tHoras) * 60);
-      const horas = Math.floor(totalMinutos / 60);
-      const minutos = totalMinutos % 60;
-      const ampm = horas >= 12 ? 'PM' : 'AM';
-      const h12 = horas > 12 ? horas - 12 : horas;
+      const minutos = ((totalMinutos % 60) + 60) % 60;
+      const horas24 = (Math.floor(totalMinutos / 60) % 24 + 24) % 24;
+      const ampm = horas24 >= 12 ? 'PM' : 'AM';
+      let h12 = horas24 % 12;
+      if (h12 === 0) h12 = 12;
       const minStr = minutos < 10 ? `0${minutos}` : minutos;
       return `${h12}:${minStr} ${ampm}`;
     }
@@ -2466,9 +2503,9 @@
 
       // Lecturas de texto
       document.getElementById("dispClock").textContent = formatearHoraFeria(t);
-      document.getElementById("dispTCurrent").textContent = `${t.toFixed(1)} h`;
-      document.getElementById("dispConc").textContent = `${C_actual.toFixed(2)} mg/mL`;
-      document.getElementById("dispPct").textContent = `${pctActual.toFixed(1)} %`;
+      document.getElementById("dispTCurrent").textContent = `${fmt(t, 1)} h`;
+      document.getElementById("dispConc").textContent = `${fmt(C_actual, 2)} mg/mL`;
+      document.getElementById("dispPct").textContent = `${fmt(pctActual, 1)} %`;
 
       // Barra de progreso horizontal
       const progFill = document.getElementById("progressFill");
@@ -2505,15 +2542,15 @@
       if (pctActual >= limiteSeguro) {
         badge.classList.add("safe");
         icon.textContent = "🟢";
-        text.textContent = `Seguro (${pctActual.toFixed(1)}% ≥ ${limiteSeguro.toFixed(1)}%)`;
+        text.textContent = `Seguro (${fmt(pctActual, 1)}% ≥ ${fmt(limiteSeguro, 1)}%)`;
       } else if (pctActual >= estado.umbralPct) {
         badge.classList.add("warning");
         icon.textContent = "🟡";
-        text.textContent = `Alerta: se acerca al límite (${pctActual.toFixed(1)}%)`;
+        text.textContent = `Alerta: se acerca al límite (${fmt(pctActual, 1)}%) (modelo hipotético)`;
       } else {
         badge.classList.add("danger");
         icon.textContent = "🔴";
-        text.textContent = `NO USAR: perdió eficacia (< ${estado.umbralPct}%)`;
+        text.textContent = `NO USAR: perdió eficacia (< ${fmt(estado.umbralPct, 0)}%) (modelo hipotético)`;
       }
 
       // Alerta Toast al cruzar el umbral
@@ -2524,7 +2561,7 @@
         const tExactHoras = estado.t90Exact;
         const hExact = Math.floor(tExactHoras);
         const mExact = Math.round((tExactHoras - hExact) * 60);
-        toastMsg.innerHTML = `⚠️ <strong>¡Umbral Crítico Cruzado!</strong> A las <strong>${hExact} h ${mExact} min</strong> (aprox. ${formatearHoraFeria(tExactHoras)}), la concentración cayó por debajo del <strong>${estado.umbralPct}%</strong>. El medicamento ha perdido su potencia terapéutica.`;
+        toastMsg.innerHTML = `⚠️ <strong>¡Umbral Crítico Cruzado!</strong> Según este modelo con parámetros hipotéticos, a las <strong>${hExact} h ${mExact} min</strong> (aprox. ${formatearHoraFeria(tExactHoras)}), la concentración cayó por debajo del <strong>${fmt(estado.umbralPct, 0)}%</strong>. En la práctica se recomienda no consumir medicamentos expuestos al sol sin confirmación de su estabilidad.`;
         toast.style.display = "flex";
       } else {
         toast.style.display = "none";
@@ -2677,7 +2714,7 @@
             },
             tooltip: {
               callbacks: {
-                label: (ctx) => ` ${ctx.dataset.label}: ${ctx.parsed.y.toFixed(4)} mg/mL`
+                label: (ctx) => ` ${ctx.dataset.label}: ${fmt(ctx.parsed.y, 4)} mg/mL`
               }
             }
           },
@@ -2714,15 +2751,13 @@
       const gridColor = isDark ? "rgba(255, 255, 255, 0.08)" : "rgba(0, 0, 0, 0.08)";
       const textColor = isDark ? "#94a3b8" : "#475569";
 
-      const errHeunData = estado.datosCombinados.map(d => ({
-        x: d.t,
-        y: estado.escalaLogErrores ? Math.max(d.errAbsH, 1e-15) : d.errAbsH
-      }));
+      const errHeunData = estado.datosCombinados
+        .filter(d => !estado.escalaLogErrores || d.errAbsH > 0)
+        .map(d => ({ x: d.t, y: d.errAbsH }));
 
-      const errRK4Data = estado.datosCombinados.map(d => ({
-        x: d.t,
-        y: estado.escalaLogErrores ? Math.max(d.errAbsR, 1e-15) : d.errAbsR
-      }));
+      const errRK4Data = estado.datosCombinados
+        .filter(d => !estado.escalaLogErrores || d.errAbsR > 0)
+        .map(d => ({ x: d.t, y: d.errAbsR }));
 
       const ctxErr = document.getElementById("chartErrores").getContext("2d");
       if (estado.chartErr) estado.chartErr.destroy();
@@ -2790,8 +2825,8 @@
        ========================================================================== */
     function formatearNumero(val) {
       if (val === 0) return "0,0000";
-      if (Math.abs(val) < 0.0001) return val.toExponential(4);
-      return val.toFixed(4);
+      if (Math.abs(val) < 0.0001) return val.toExponential(4).replace('.', ',');
+      return fmt(val, 4);
     }
 
     function actualizarKPIs(maxErrH, maxErrR, maxRelH, maxRelR) {
@@ -2800,13 +2835,19 @@
       const mEx = Math.round((tExact - hEx) * 60);
 
       document.getElementById("kpiT90Exact").textContent = `${hEx} h ${mEx} min`;
-      document.getElementById("kpiT90ExactDecimal").textContent = `${tExact.toFixed(4)} horas exactas`;
+      if (tExact > estado.T) {
+        document.getElementById("kpiT90ExactDecimal").textContent = `fuera de la jornada simulada (T = ${fmt(estado.T, 0)} h)`;
+      } else {
+        document.getElementById("kpiT90ExactDecimal").textContent = `${fmt(tExact, 4)} horas exactas`;
+      }
 
       document.getElementById("kpiMaxErrHeun").textContent = formatearNumero(maxErrH);
-      document.getElementById("kpiMaxRelHeun").textContent = `Error rel: ${maxRelH.toFixed(4)}% (h=${estado.h}h)`;
+      const relHTexto = maxRelH < 0.0001 ? maxRelH.toExponential(2).replace('.', ',') : fmt(maxRelH, 4);
+      document.getElementById("kpiMaxRelHeun").textContent = `Error rel: ${relHTexto}% (h=${fmt(estado.h, estado.h % 1 === 0 ? 0 : 2)} h)`;
 
       document.getElementById("kpiMaxErrRK4").textContent = formatearNumero(maxErrR);
-      document.getElementById("kpiMaxRelRK4").textContent = `Error rel: ${maxRelR.toFixed(6)}%`;
+      const relRTexto = maxRelR < 0.0001 ? maxRelR.toExponential(2).replace('.', ',') : fmt(maxRelR, 6);
+      document.getElementById("kpiMaxRelRK4").textContent = `Error rel: ${relRTexto}%`;
 
       const ratio = maxErrR > 0 ? (maxErrH / maxErrR) : 999999;
       document.getElementById("kpiWinner").textContent = maxErrR <= maxErrH ? "RK4 (Orden 4)" : "Heun (RK2)";
@@ -2814,7 +2855,7 @@
     }
 
     function poblarTablaPasos() {
-      document.getElementById("lblTableH").textContent = estado.h;
+      document.getElementById("lblTableH").textContent = fmt(estado.h, estado.h % 1 === 0 ? 0 : 2);
       const tbody = document.getElementById("tablaPasosBody");
       tbody.innerHTML = "";
 
@@ -2822,14 +2863,14 @@
         const tr = document.createElement("tr");
         tr.innerHTML = `
           <td class="center" style="color: var(--text-dim);">${row.n}</td>
-          <td class="center" style="font-weight: 700;">${row.t.toFixed(2)}</td>
+          <td class="center" style="font-weight: 700;">${fmt(row.t, 2)}</td>
           <td style="color: var(--color-exact); font-weight: 600;">${formatearNumero(row.cExact)}</td>
           <td style="color: var(--color-heun);">${formatearNumero(row.cHeun)}</td>
           <td style="color: var(--color-rk4);">${formatearNumero(row.cRK4)}</td>
           <td>${formatearNumero(row.errAbsH)}</td>
           <td>${formatearNumero(row.errAbsR)}</td>
-          <td>${row.errRelH < 0.0001 ? row.errRelH.toExponential(2) : row.errRelH.toFixed(4)}%</td>
-          <td>${row.errRelR < 0.0001 ? row.errRelR.toExponential(2) : row.errRelR.toFixed(6)}%</td>
+          <td>${row.errRelH < 0.0001 ? row.errRelH.toExponential(2).replace('.', ',') : fmt(row.errRelH, 4)}%</td>
+          <td>${row.errRelR < 0.0001 ? row.errRelR.toExponential(2).replace('.', ',') : fmt(row.errRelR, 6)}%</td>
         `;
         tbody.appendChild(tr);
       });
@@ -2840,14 +2881,31 @@
       tbody.innerHTML = "";
 
       const tEx = estado.t90Exact;
-      const diffH_min = estado.t90Heun !== null ? Math.abs(estado.t90Heun - tEx) * 60 : null;
-      const diffR_min = estado.t90RK4 !== null ? Math.abs(estado.t90RK4 - tEx) * 60 : null;
-      const rk4Gana = diffR_min !== null && diffH_min !== null && diffR_min <= diffH_min;
+      const tExFueraDeT = tEx > estado.T;
+      const diffH_min = (estado.t90Heun !== null && !tExFueraDeT) ? Math.abs(estado.t90Heun - tEx) * 60 : null;
+      const diffR_min = (estado.t90RK4 !== null && !tExFueraDeT) ? Math.abs(estado.t90RK4 - tEx) * 60 : null;
+      const ambosExisten = estado.t90Heun !== null && estado.t90RK4 !== null && !tExFueraDeT;
+      const rk4Gana = ambosExisten && diffR_min !== null && diffH_min !== null && diffR_min <= diffH_min;
 
       const items = [
-        { metodo: "Analítica (Fórmula exacta)", t: `${tEx.toFixed(4)} h`, diff: "0,0 min", badge: "Referencia" },
-        { metodo: "Heun (RK2)", t: estado.t90Heun ? `${estado.t90Heun.toFixed(4)} h` : "> T", diff: diffH_min !== null ? `${diffH_min.toFixed(2)} min` : "N/D", badge: "O(h²)" },
-        { metodo: "Runge-Kutta 4 (RK4)", t: estado.t90RK4 ? `${estado.t90RK4.toFixed(4)} h` : "> T", diff: diffR_min !== null ? `${diffR_min.toFixed(2)} min` : "N/D", badge: rk4Gana ? "Más cercano" : "—" }
+        {
+          metodo: "Analítica (Fórmula exacta)",
+          t: tExFueraDeT ? `${fmt(tEx, 4)} h (fuera de T)` : `${fmt(tEx, 4)} h`,
+          diff: tExFueraDeT ? "N/D" : "0,0 min",
+          badge: "Referencia"
+        },
+        {
+          metodo: "Heun (RK2)",
+          t: estado.t90Heun !== null ? `${fmt(estado.t90Heun, 4)} h` : "No cruza en [0, T]",
+          diff: (estado.t90Heun !== null && diffH_min !== null) ? `${fmt(diffH_min, 2)} min` : "N/D",
+          badge: (estado.t90Heun !== null && !tExFueraDeT) ? "O(h²)" : "—"
+        },
+        {
+          metodo: "Runge-Kutta 4 (RK4)",
+          t: estado.t90RK4 !== null ? `${fmt(estado.t90RK4, 4)} h` : "No cruza en [0, T]",
+          diff: (estado.t90RK4 !== null && diffR_min !== null) ? `${fmt(diffR_min, 2)} min` : "N/D",
+          badge: rk4Gana ? "Más cercano" : "—"
+        }
       ];
 
       items.forEach(it => {
@@ -2878,15 +2936,15 @@
           metodo: `Heun (RK2)`,
           e1: formatearNumero(errH1),
           e2: formatearNumero(errH2),
-          ratio: `${ratioH.toFixed(2)}x`,
-          orden: `p ≈ ${ordenH.toFixed(2)} (esperado: 2)`
+          ratio: `${fmt(ratioH, 2)}x`,
+          orden: `p ≈ ${fmt(ordenH, 2)} (esperado: 2)`
         },
         {
           metodo: `Runge-Kutta 4`,
           e1: formatearNumero(errR1),
           e2: formatearNumero(errR2),
-          ratio: `${ratioR.toFixed(2)}x`,
-          orden: `p ≈ ${ordenR.toFixed(2)} (esperado: 4)`
+          ratio: `${fmt(ratioR, 2)}x`,
+          orden: `p ≈ ${fmt(ordenR, 2)} (esperado: 4)`
         }
       ];
 
@@ -2915,26 +2973,46 @@
       if (typeof maxRelR === "number" && maxRelR > 0) {
         errRelTexto = maxRelR < 0.0001
           ? maxRelR.toExponential(2).replace('.', ',')
-          : maxRelR.toFixed(4).replace('.', ',');
+          : fmt(maxRelR, 4);
       }
 
       const comparacionPrecision = maxErrR > 0
         ? `aproximadamente <strong class="teal">${ratio} veces más preciso</strong>`
         : `<strong class="teal">significativamente más preciso</strong>`;
 
+      const cruzaEnT = estado.t90Exact <= estado.T;
+      const concFinal = solAnalitica(estado.C0, estado.k, estado.T);
+      const pctFinal = (concFinal / estado.C0) * 100;
+
+      let primerParrafo = "";
+      let segundoParrafo = "";
+
+      if (cruzaEnT) {
+        primerParrafo = `
+          📢 <strong>Dictamen de Exposición:</strong> Según este modelo con parámetros hipotéticos 
+          (C₀ = <strong>${fmt(estado.C0, 1)} mg/mL</strong>, k = <strong>${fmt(estado.k, 4)} h⁻¹</strong>), el antibiótico en suspensión cae por debajo del umbral crítico de seguridad del <strong>${fmt(estado.umbralPct, 0)}%</strong> a las 
+          <strong class="teal">${hEx} horas y ${mEx} minutos</strong> de exposición solar continua en la feria 
+          (aproximadamente a las <strong class="teal">${horaReloj}</strong> si la exposición inició a las 08:00 AM).
+        `;
+        segundoParrafo = `
+          A partir de ese instante en el modelo, el principio activo queda por debajo del umbral terapéutico (<strong class="danger">${fmt(estado.umbralPct, 0)}%</strong>); en la práctica se recomienda no consumir medicamentos expuestos al sol sin confirmación de su estabilidad, pues dosis subterapéuticas pueden comprometer el tratamiento pediátrico.
+        `;
+      } else {
+        primerParrafo = `
+          📢 <strong>Dictamen de Exposición:</strong> Según este modelo con parámetros hipotéticos 
+          (C₀ = <strong>${fmt(estado.C0, 1)} mg/mL</strong>, k = <strong>${fmt(estado.k, 4)} h⁻¹</strong>), el principio activo <strong>NO cae por debajo del umbral de seguridad</strong> durante las <strong>${fmt(estado.T, 0)} horas simuladas</strong>, finalizando con un <strong>${fmt(pctFinal, 1)}%</strong> de concentración remanente. Teóricamente, el umbral del <strong>${fmt(estado.umbralPct, 0)}%</strong> se alcanzaría a las <strong class="teal">${hEx} horas y ${mEx} minutos</strong> (${horaReloj}), fuera de la jornada simulada.
+        `;
+        segundoParrafo = `
+          Dentro del período simulado de ${fmt(estado.T, 0)} horas bajo este modelo hipotético, la concentración calculada se mantiene por encima del límite terapéutico mínimo; no obstante, en condiciones reales se aconseja resguardar siempre los fármacos de la luz solar y el calor.
+        `;
+      }
+
       const box = document.getElementById("boxConclusionDinamica");
       box.innerHTML = `
-        <p style="margin-bottom: 12px;">
-          📢 <strong>Dictamen de Exposición:</strong> Con los parámetros hipotéticos evaluados 
-          (C₀ = <strong>${estado.C0} mg/mL</strong>, k = <strong>${estado.k} h⁻¹</strong>), el antibiótico en suspensión cae por debajo del umbral crítico de seguridad del <strong>${estado.umbralPct}%</strong> a las 
-          <strong class="teal">${hEx} horas y ${mEx} minutos</strong> de exposición solar continua en la feria 
-          (aproximadamente a las <strong class="teal">${horaReloj}</strong> si el comerciante armó el puesto a las 08:00 AM).
-        </p>
-        <p style="margin-bottom: 12px;">
-          A partir de ese instante, el preparado <strong class="danger">pierde su ventana terapéutica segura</strong> y no debe consumirse, pues suministra dosis subterapéuticas que inducen resistencia bacteriana en infecciones infantiles.
-        </p>
+        <p style="margin-bottom: 12px;">${primerParrafo.trim()}</p>
+        <p style="margin-bottom: 12px;">${segundoParrafo.trim()}</p>
         <p>
-          🔬 <strong>Evaluación Numérica:</strong> El método <strong>Runge-Kutta de 4.° Orden (RK4)</strong> demostró ser ${comparacionPrecision} que el método de Heun (RK2), alcanzando un error relativo máximo de <strong>${errRelTexto}%</strong> con paso h = ${estado.h} h, lo que confirma su fiabilidad como estándar para simulaciones farmacológicas.
+          🔬 <strong>Evaluación Numérica:</strong> El método <strong>Runge-Kutta de 4.° Orden (RK4)</strong> demostró ser ${comparacionPrecision} que el método de Heun (RK2), alcanzando un error relativo máximo de <strong>${errRelTexto}%</strong> con paso h = ${fmt(estado.h, estado.h % 1 === 0 ? 0 : 2)} h, lo que confirma su fiabilidad como estándar para simulaciones farmacológicas.
         </p>
       `;
     }
