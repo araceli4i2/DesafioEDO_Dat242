@@ -1385,9 +1385,7 @@
           <div class="card-icon" style="color: var(--status-danger); background: rgba(239, 68, 68, 0.15);">🦠</div>
           <h3>Resistencia Antimicrobiana (RAM)</h3>
           <p>
-            Cuando un paciente compra un jarabe degradado (< 90% del principio activo), recibe una <strong>subdosis
-              terapéutica</strong>. Esto no solo provoca el fracaso del tratamiento en niños con infecciones agudas,
-              sino que estimula la selección de bacterias multirresistentes.
+            Si un paciente recibe un jarabe con menos principio activo del esperado (por ejemplo, &lt; 90%), podría recibir una <strong>subdosis terapéutica</strong>, lo que puede favorecer el fracaso del tratamiento en niños y la selección de bacterias resistentes.
           </p>
         </div>
       </div>
@@ -1657,7 +1655,7 @@
             <!-- Frasco SVG -->
             <div class="svg-bottle-wrapper">
               <!-- Sol radiante -->
-              <div class="sun-radiance-box" title="Radiación UV Extrema de El Alto (Índice UV 12+)">
+              <div class="sun-radiance-box" title="Radiación UV elevada por la altitud de El Alto">
                 <svg viewBox="0 0 100 100" width="64" height="64">
                   <circle cx="50" cy="50" r="20" fill="#f59e0b" />
                   <g stroke="#f59e0b" stroke-width="4" stroke-linecap="round">
@@ -2372,7 +2370,7 @@
       document.getElementById("lblBottleC0").textContent = `C₀: ${fmt(estado.C0, estado.C0 % 1 === 0 ? 0 : 2)} mg/mL`;
       document.getElementById("lblThresholdMarker").textContent = `Límite de seguridad: ${fmt(estado.umbralPct, 0)}%`;
       document.getElementById("thresholdPin").style.left = `${estado.umbralPct}%`;
-      document.getElementById("lblMaxT").textContent = `${estado.T} h (${formatearHoraFeria(estado.T)})`;
+      document.getElementById("lblMaxT").textContent = `${fmt(estado.T, Number.isInteger(estado.T) ? 0 : 1)} h (${formatearHoraFeria(estado.T)})`;
       document.getElementById("timeScrubber").max = estado.T;
 
       // 1. Resolver con paso h
@@ -2559,8 +2557,9 @@
 
       if (pctActual < estado.umbralPct) {
         const tExactHoras = estado.t90Exact;
-        const hExact = Math.floor(tExactHoras);
-        const mExact = Math.round((tExactHoras - hExact) * 60);
+        const totMin = Math.round(tExactHoras * 60);
+        const hExact = Math.floor(totMin / 60);
+        const mExact = totMin % 60;
         toastMsg.innerHTML = `⚠️ <strong>¡Umbral Crítico Cruzado!</strong> Según este modelo con parámetros hipotéticos, a las <strong>${hExact} h ${mExact} min</strong> (aprox. ${formatearHoraFeria(tExactHoras)}), la concentración cayó por debajo del <strong>${fmt(estado.umbralPct, 0)}%</strong>. En la práctica se recomienda no consumir medicamentos expuestos al sol sin confirmación de su estabilidad.`;
         toast.style.display = "flex";
       } else {
@@ -2795,7 +2794,7 @@
             },
             tooltip: {
               callbacks: {
-                label: (ctx) => ` ${ctx.dataset.label}: ${ctx.parsed.y.toExponential(4)} mg/mL`
+                label: (ctx) => ` ${ctx.dataset.label}: ${ctx.parsed.y.toExponential(4).replace('.', ',')} mg/mL`
               }
             }
           },
@@ -2812,7 +2811,7 @@
               grid: { color: gridColor },
               ticks: {
                 color: textColor,
-                callback: (val) => Number(val).toExponential(1)
+                callback: (val) => Number(val).toExponential(1).replace('.', ',')
               }
             }
           }
@@ -2831,12 +2830,13 @@
 
     function actualizarKPIs(maxErrH, maxErrR, maxRelH, maxRelR) {
       const tExact = estado.t90Exact;
-      const hEx = Math.floor(tExact);
-      const mEx = Math.round((tExact - hEx) * 60);
+      const totMin = Math.round(tExact * 60);
+      const hEx = Math.floor(totMin / 60);
+      const mEx = totMin % 60;
 
       document.getElementById("kpiT90Exact").textContent = `${hEx} h ${mEx} min`;
       if (tExact > estado.T) {
-        document.getElementById("kpiT90ExactDecimal").textContent = `fuera de la jornada simulada (T = ${fmt(estado.T, 0)} h)`;
+        document.getElementById("kpiT90ExactDecimal").textContent = `fuera de la jornada simulada (T = ${fmt(estado.T, Number.isInteger(estado.T) ? 0 : 1)} h)`;
       } else {
         document.getElementById("kpiT90ExactDecimal").textContent = `${fmt(tExact, 4)} horas exactas`;
       }
@@ -2963,8 +2963,9 @@
 
     function actualizarInterpretacionDinamica(maxErrH, maxErrR, maxRelR) {
       const tExactHoras = estado.t90Exact;
-      const hEx = Math.floor(tExactHoras);
-      const mEx = Math.round((tExactHoras - hEx) * 60);
+      const totMin = Math.round(tExactHoras * 60);
+      const hEx = Math.floor(totMin / 60);
+      const mEx = totMin % 60;
       const horaReloj = formatearHoraFeria(tExactHoras);
 
       const ratio = maxErrR > 0 ? Math.round(maxErrH / maxErrR).toLocaleString('es-BO') : "significativamente";
