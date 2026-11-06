@@ -1,6 +1,8 @@
 # Farmacocinética Ambiental: Degradación de Medicamentos Expuestos al Sol en Ferias Populares
 
 > **Desafío Universitario de Métodos Numéricos**  
+> **Autora:** Serrano Mamani Raquel Araceli  
+> **Materia:** Métodos Numéricos (DAT-242) — Carrera de Informática, UMSA  
 > Simulación interactiva de degradación de medicamentos en suspensión expuestos a radiación solar ultravioleta y calor extremo en la **Feria 16 de Julio (El Alto, Bolivia, 4.000 m.s.n.m.)**.  
 > Comparación de métodos de un solo paso: **Método de Heun (RK2)** vs. **Runge-Kutta de 4.° Orden (RK4)** frente a la **Solución Analítica Exacta**.
 
@@ -108,7 +110,7 @@ El proyecto está diseñado bajo la filosofía de **cero dependencias locales**,
 ### Opción A: Ejecución Local Inmediata (Sin Internet)
 1. Clona o descarga este repositorio:
    ```bash
-   git clone https://github.com/tu-usuario/farmacocinetica-feria.git
+   git clone https://github.com/araceli4i2/DesafioEDO_Dat242.git
    ```
 2. Haz doble clic en el archivo `index.html` o ábrelo directamente en tu navegador preferido (Chrome, Edge, Firefox, Safari).
 3. No requiere Node.js, Python, extensiones ni configuración de servidores.
@@ -120,9 +122,9 @@ El proyecto está diseñado bajo la filosofía de **cero dependencias locales**,
    git init
    git add .
    git commit -m "Publicación inicial del simulador de farmacocinética"
-   git branch -M main
-   git remote add origin https://github.com/tu-usuario/nombre-del-repo.git
-   git push -u origin main
+   git branch -M master
+   git remote add origin https://github.com/araceli4i2/DesafioEDO_Dat242.git
+   git push -u origin master
    ```
 3. En GitHub, dirígete a:  
    **Settings** (pestaña superior) $\rightarrow$ **Pages** (menú lateral izquierdo).
@@ -131,7 +133,7 @@ El proyecto está diseñado bajo la filosofía de **cero dependencias locales**,
    * Carpeta: `/ (root)`.
    * Presiona **Save**.
 5. Espera unos 60 segundos. GitHub te proporcionará la URL pública:  
-   `https://tu-usuario.github.io/nombre-del-repo/`
+   `https://araceli4i2.github.io/DesafioEDO_Dat242/`
 
 ---
 
